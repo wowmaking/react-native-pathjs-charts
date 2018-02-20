@@ -47,6 +47,8 @@ export default class PieChart extends Component {
         color: '#ECF0F1'
       }
     },
+    strokeColor: undefined,
+    strokeWidth: undefined,
   }
 
   constructor(props){
@@ -176,7 +178,7 @@ export default class PieChart extends Component {
 
       slices = chart.curves.map( (c, i) => {
         let fill = (c.item.color && Colors.string(c.item.color)) || this.color(i)
-        let stroke = typeof fill === 'string' ? fill : Colors.darkenColor(fill)
+        let stroke = this.props.options.strokeColor || (typeof fill === 'string' ? fill : Colors.darkenColor(fill))
         const opacity = this._shouldAnim() ? 0 : 1
         const finalStroke = this._shouldAnim() ? undefined : stroke
 
@@ -184,7 +186,7 @@ export default class PieChart extends Component {
 
         return (
                   <G key={ i }>
-                      <Path  ref={ref => (this._animationRefArray[`SLICE${i}`] = ref)} fill={fill} fillOpacity={opacity} d={c.sector.path.print() } stroke={finalStroke} />
+                      <Path  ref={ref => (this._animationRefArray[`SLICE${i}`] = ref)} fill={fill} fillOpacity={opacity} d={c.sector.path.print() } stroke={finalStroke} strokeWidth={this.props.options.strokeWidth} />
                       <G x={options.margin.left} y={options.margin.top}>
                         <Text fontFamily={textStyle.fontFamily}
                               fontSize={textStyle.fontSize}
